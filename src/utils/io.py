@@ -6,7 +6,7 @@ from utils.paths import (
 
 def read_event_dumps(
     spark,
-    caos_client,
+    aos_client,
     event,
     env="prd",
     select_fields=None,
@@ -16,7 +16,7 @@ def read_event_dumps(
     **range_kwargs
 ):
     paths = resolve_event_paths(
-        caos_client, env, event, **range_kwargs
+        aos_client, env, event, **range_kwargs
     )
     schema = custom_schema or get_schema("event", event, select_fields, drop_fields)
 
@@ -28,7 +28,7 @@ def read_event_dumps(
 
 def read_catalog(
     spark,
-    caos_client,
+    aos_client,
     date_ref,
     env="prd",
     select_fields=None,
@@ -36,7 +36,7 @@ def read_catalog(
     custom_schema=None,
     dry_run=False,
 ):
-    paths = resolve_catalog_paths(caos_client, env, date_ref)
+    paths = resolve_catalog_paths(aos_client, env, date_ref)
 
     schema = custom_schema or get_schema(
         "catalog", "products", select_fields, drop_fields
@@ -48,13 +48,13 @@ def read_catalog(
 
 
 def write_dump(
-    caos_client,
+    aos_client,
     dataframe,
     algorithm,
     generation,
     dry_run=False,
 ):
-    output_path = make_algref_path(caos_client, algorithm, generation)
+    output_path = make_algref_path(aos_client, algorithm, generation)
     if dry_run:
         return
 

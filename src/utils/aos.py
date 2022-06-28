@@ -1,10 +1,9 @@
-from os import getenv
+import os
 import os.path as P
-from io import BytesIO
 
 
-class CAOS_client:
-    """Cloud-Agnostic Object Storage client"""
+class AOS_client:
+    """Agnostic Object Storage client"""
 
     def __init__(self, provider: str, *args, **kwargs):
 
@@ -13,6 +12,7 @@ class CAOS_client:
         self.__sparkify = None
         self.__open = None
         self.__provider_inits = {
+            "os": self.__os_client,
             "aws": self.__aws_s3_client,
             # "azure": self.__azure_blob_storage_client,
             # "gcp": self.__gcp_storage_client,
@@ -26,6 +26,15 @@ class CAOS_client:
 
         self.provider = provider
         self.__provider_inits[provider](self, *args, **kwargs)
+
+
+    def __os_client(self, *args, **kwargs):
+
+        self.__ls = os.listdir
+        self.__exists = P.exists
+        self.__open = os.open
+        self.__sparkify = lambda path: P.join("/", path)
+
 
     def __aws_s3_client(self, *args, **kwargs):
         import s3fs
