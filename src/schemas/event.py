@@ -7,7 +7,7 @@ _buyorder_item = StructType(
             "product",
             StructType(
                 [
-                    StructField("product_id", StringType(), True),
+                    StructField("id", StringType(), True),
                     StructField("price", DoubleType(), True),
                     StructField("specs", MapType(StringType(), StringType()), True),
                 ]

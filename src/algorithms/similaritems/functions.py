@@ -24,7 +24,7 @@ def select_buyorder_columns(buyorders) -> DataFrame:
         F.col("user_id").alias("user_id"),
         # in buyorder case order_id is the LINK
         F.col("order_id").alias("LINK"),
-        F.col("item")["product"]["product_id"].alias("ITEM"),
+        F.col("item")["product"]["id"].alias("ITEM"),
     )
 
 

@@ -44,9 +44,7 @@ def resolve_event_paths(aos_client, env, event, date_ref, n_months):
         root = PATH_ROOTS["dev"]["events"]
 
     dates = date_range(end=date_ref, periods=n_months + 1, freq="MS")[:-1].date
-    print(dates)
     paths = [P.join(root, event, date.strftime("%Y-%m-%d")) for date in dates]
-    print(paths)
     spark_paths = [aos_client.sparkify(p) for p in paths if aos_client.exists(p)]
 
     if len(spark_paths) > 0:
