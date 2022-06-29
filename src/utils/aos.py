@@ -27,14 +27,18 @@ class AOS_client:
         self.provider = provider
         self.__provider_inits[provider](self, *args, **kwargs)
 
-
     def __os_client(self, *args, **kwargs):
+        def os_ls(path):
+            dirs = os.listdir(P.join("/", path))
+            return [P.join(path, d) for d in dirs]
 
-        self.__ls = os.listdir
-        self.__exists = P.exists
+        def os_exists(path):
+            return P.exists(P.join("/", path))
+
+        self.__ls = os_ls
+        self.__exists = os_exists
         self.__open = os.open
         self.__sparkify = lambda path: P.join("/", path)
-
 
     def __aws_s3_client(self, *args, **kwargs):
         import s3fs

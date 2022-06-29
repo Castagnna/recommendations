@@ -9,10 +9,10 @@ _buyorder_item = StructType(
                 [
                     StructField("product_id", StringType(), True),
                     StructField("price", DoubleType(), True),
+                    StructField("specs", MapType(StringType(), StringType()), True),
                 ]
             ),
         ),
-        StructField("quantity", DoubleType(), True),
     ]
 )
 
@@ -24,6 +24,5 @@ buyorder = StructType(
         StructField("items", ArrayType(_buyorder_item, True), True),
         StructField("date", StringType(), True),
         StructField("total", DoubleType(), True),
-        StructField("payment_type", StringType(), True),
     ]
 )

@@ -16,17 +16,26 @@ if __name__ == "__main__":
     parser.add_argument("-e", "--env", help="environment", default="prd")
     parser.add_argument("-c", "--client", help="client provider", default="os")
     parser.add_argument("-d", "--datetime", help="reference datetime", default="today")
-    parser.add_argument("--dry-run", help="just map input and output paths", action="store_true", default=False)
-    parser.add_argument("--algorithm-args", help="algorithm arguments", required=False, nargs="*")
+    parser.add_argument(
+        "--dry-run",
+        help="just map input and output paths",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument(
+        "--algorithm-args", help="algorithm arguments", required=False, nargs="*"
+    )
 
     args = parser.parse_args()
 
     tunings = dict([x.split("=") for x in (args.algorithm_args or [])])
 
-    algorithm = args.algorithm_name.split(":", 1)
+    algorithm = args.algorithm_name.split(":")
     if len(algorithm) == 1:
         algorithm.append("setup")
     module = "algorithms.{}.{}".format(*algorithm)
     algorithm_module = importlib.import_module(module)
 
-    algorithm_module.setup(args.env, args.client, args.datetime, args.dry_run, **tunings)
+    algorithm_module.setup(
+        args.env, args.client, args.datetime, args.dry_run, **tunings
+    )

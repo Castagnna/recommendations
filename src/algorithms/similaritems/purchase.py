@@ -120,6 +120,7 @@ def setup(env="prd", provider="os", date_ref="today", dry_run=False, **tunings):
         "buyorder",
         env=env,
         select_fields=["client", "items", "user_id"],
+        drop_fields=["items.product.specs"],
         dry_run=dry_run,
         end=date_ref,
         start=date_ref.replace(day=1),
