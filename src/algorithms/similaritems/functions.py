@@ -10,18 +10,18 @@ def filter_items(items) -> DataFrame:
 
 
 def select_purchase_columns(events) -> DataFrame:
-    return events.withColumn("item", F.explode("items").alias("item"),).select(
+    return events.withColumn("item", F.explode("items").alias("item")).select(
         "client",
         # LINK in algorithm recommendation context refers to the atribute which link items
         F.col("user_id").alias("LINK"),
-        F.col("item")["product"]["product_id"].alias("ITEM"),
+        F.col("item")["product"]["id"].alias("ITEM"),
     )
 
 
 def select_buyorder_columns(buyorders) -> DataFrame:
     return buyorders.withColumn("item", F.explode("items").alias("item"),).select(
-        F.col("client").alias("client"),
-        F.col("user_id").alias("user_id"),
+        "client",
+        "user_id",
         # in buyorder case order_id is the LINK
         F.col("order_id").alias("LINK"),
         F.col("item")["product"]["id"].alias("ITEM"),

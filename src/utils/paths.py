@@ -1,4 +1,3 @@
-import re
 from pandas import date_range
 from datetime import datetime, timedelta
 import os.path as P

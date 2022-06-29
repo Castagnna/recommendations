@@ -92,24 +92,17 @@ def setup(env="prd", provider="os", date_ref="today", dry_run=False, **tunings):
     spark = start_spark(deploy_mode)
     aos = AOS_client(provider)
 
-    # inputs
     if date_ref == "today":
         date_ref = job_start_dttm.date()
     else:
         date_ref = dateparser.parse(date_ref)
 
-    if env == "prd":
-        input_block = "all"
-    else:
-        input_block = ""
-
     products = read_catalog(
         spark,
         aos,
         "products",
-        date_ref,
-        input_block,
-        env,
+        date_ref=None,
+        env=env,
         select_fields=["client", "product_id", "status"],
         dry_run=dry_run,
     )
@@ -122,8 +115,8 @@ def setup(env="prd", provider="os", date_ref="today", dry_run=False, **tunings):
         select_fields=["client", "items", "user_id"],
         drop_fields=["items.product.specs"],
         dry_run=dry_run,
-        end=date_ref,
-        start=date_ref.replace(day=1),
+        date_ref=date_ref,
+        n_months=1,
     )
 
     output = None
@@ -140,7 +133,5 @@ def setup(env="prd", provider="os", date_ref="today", dry_run=False, **tunings):
         )
 
     generation = job_start_dttm.strftime("%Y%m%d-%H%M%S")
-    output_block = "all" if env == "prd" else env
-    write_dump(
-        aos, output, SIMILARITEMS_ALGO, generation, output_block, dry_run=dry_run
-    )
+
+    write_dump(aos, env, output, SIMILARITEMS_ALGO, generation, dry_run=dry_run)
