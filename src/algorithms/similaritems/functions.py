@@ -51,7 +51,7 @@ def count_distinct_items_per_user(valid_events) -> DataFrame:
 
 def count_items_from_same_user_id_for_distinct_orders(valid_events) -> DataFrame:
     """
-    Used by opsi buyorder algo.
+    Used by si buyorder algo.
     """
 
     items_per_user_id = valid_events.groupby(["client", "user_id"]).agg(
