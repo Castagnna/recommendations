@@ -4,7 +4,7 @@ from pyspark import SparkContext
 from pyspark.sql import SparkSession
 from os import environ, sysconf
 from os.path import abspath, curdir, splitext, join
-from .os import get_total_memory, get_num_cores, choose_storage_device
+from utils.os import get_total_memory, get_num_cores, choose_storage_device
 
 
 ncores = sysconf("SC_NPROCESSORS_ONLN")
@@ -96,8 +96,8 @@ def start_spark(
             "spark.hadoop.fs.s3a.connection.timeout": "3600000",
             "spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version": "2",
             "spark.speculation": "false",
-            "spark.executor.extraJavaOptions": "-XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:+G1SummarizeConcMark",
-            "spark.driver.extraJavaOptions": "-XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:+G1SummarizeConcMark",
+            # "spark.executor.extraJavaOptions": "-XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:+G1SummarizeConcMark",
+            # "spark.driver.extraJavaOptions": "-XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:+G1SummarizeConcMark",
             **extra_conf,
         }
 
