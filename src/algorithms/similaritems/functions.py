@@ -10,30 +10,30 @@ def filter_items(items) -> DataFrame:
 
 
 def select_purchase_columns(events) -> DataFrame:
-    return events.withColumn("item", F.explode("items").alias("item"),).select(
+    return events.withColumn("item", F.explode("items").alias("item")).select(
         "client",
         # LINK in algorithm recommendation context refers to the atribute which link items
         F.col("user_id").alias("LINK"),
-        F.col("item")["product"]["product_id"].alias("ITEM"),
+        F.col("item")["product"]["id"].alias("ITEM"),
     )
 
 
-def select_buyorder_columns(events) -> DataFrame:
-    return events.withColumn("item", F.explode("items").alias("item"),).select(
-        F.col("client").alias("client"),
-        F.col("user_id").alias("user_id"),
+def select_buyorder_columns(buyorders) -> DataFrame:
+    return buyorders.withColumn("item", F.explode("items").alias("item"),).select(
+        "client",
+        "user_id",
         # in buyorder case order_id is the LINK
         F.col("order_id").alias("LINK"),
-        F.col("item")["product"]["product_id"].alias("ITEM"),
+        F.col("item")["product"]["id"].alias("ITEM"),
     )
 
 
-def create_artificial_id(all_buyorder_events) -> DataFrame:
+def create_artificial_id(buyorders) -> DataFrame:
     """
     To avoid identical order identifiers coming from different users.
     Just apply for buyorder modality
     """
-    return all_buyorder_events.withColumn("LINK", F.concat("user_id", "LINK"))
+    return buyorders.withColumn("LINK", F.concat("user_id", "LINK"))
 
 
 def filter_available_or_unavailable_items(events, valid_items):
